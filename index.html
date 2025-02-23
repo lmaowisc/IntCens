@@ -45,8 +45,80 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9">
-Implements non- and semi-parametric methods for analyzing interval-censored data. This includes iterative estimation routines for proportional hazards and proportional odds models, as well as nonparametric maximum likelihood estimation.
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="intcens">IntCens<a class="anchor" aria-label="anchor" href="#intcens"></a>
+</h1></div>
+<p>The <code>IntCens</code> package provides non- and semi-parametric methods for analyzing interval-censored data. This includes iterative estimation routines for proportional hazards and proportional odds models, as well as nonparametric maximum likelihood estimation.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version of IntCens from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"lmaowisc/IntCens"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>The main function for fitting nonparametric, PH, and PO models is <code><a href="reference/icsurvfit.html">icsurvfit()</a></code>. Below is a basic example:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lmaowisc/IntCens" class="external-link">IntCens</a></span><span class="op">)</span></span>
+<span><span class="co">## basic example code</span></span>
+<span><span class="co"># A dataset containing interval-censored observations and a treatment indicator </span></span>
+<span><span class="co"># (radiation vs. radiation plus chemotherapy)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">bcos</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">bcos</span><span class="op">)</span> <span class="co"># sample size</span></span>
+<span><span class="co"># Extract the left and right endpoints of the intervals</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">L</span> <span class="op">&lt;-</span> <span class="va">bcos</span><span class="op">$</span><span class="va">left</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>, <span class="fl">0.0001</span><span class="op">)</span> <span class="co"># add random noise</span></span>
+<span><span class="va">R</span> <span class="op">&lt;-</span> <span class="va">bcos</span><span class="op">$</span><span class="va">right</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>, <span class="fl">0.0001</span><span class="op">)</span></span>
+<span><span class="co"># Covariate (binary)</span></span>
+<span><span class="va">Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">bcos</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="st">"RadChem"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Nonparametric</span></span>
+<span><span class="va">obj_np</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/icsurvfit.html">icsurvfit</a></span><span class="op">(</span><span class="va">L</span>, <span class="va">R</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">obj_np</span>, main <span class="op">=</span> <span class="st">"Nonparametric"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-1.png" width="100%"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Cox model (PH)</span></span>
+<span><span class="va">obj_ph</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/icsurvfit.html">icsurvfit</a></span><span class="op">(</span><span class="va">L</span>, <span class="va">R</span>, <span class="va">Z</span>, model <span class="op">=</span> <span class="st">"PH"</span><span class="op">)</span></span>
+<span><span class="va">obj_ph</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; icsurvfit(L = L, R = R, Z = Z, model = "PH")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; NPMLE of proportional hazards for interval-censored data:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ICM algorithm converges in 21 iterations.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Maximum Likelihood Estimates for Regression parameters:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Estimate  StdErr z.value  p.value   </span></span>
+<span><span class="co">#&gt; [1,]  0.83568 0.30446  2.7448 0.006055 **</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Proportional odds model (PO)</span></span>
+<span><span class="va">obj_po</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/icsurvfit.html">icsurvfit</a></span><span class="op">(</span><span class="va">L</span>, <span class="va">R</span>, <span class="va">Z</span>, model <span class="op">=</span> <span class="st">"PO"</span><span class="op">)</span></span>
+<span><span class="va">obj_po</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; icsurvfit(L = L, R = R, Z = Z, model = "PO")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; NPMLE of proportional odds for interval-censored data:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ICM algorithm converges in 20 iterations.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Maximum Likelihood Estimates for Regression parameters:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Estimate  StdErr z.value p.value  </span></span>
+<span><span class="co">#&gt; [1,]  0.91123 0.41753  2.1824 0.02908 *</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+</div>
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
