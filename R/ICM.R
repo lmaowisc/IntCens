@@ -16,10 +16,6 @@
 #' in \code{G} and picks the minimum slope iteratively, ensuring the resulting
 #' piecewise-linear function is convex.
 #'
-#' @examples
-#' G <- c(1, 2, 4, 5)
-#' Q <- c(2, 1, 3, 2)
-#' CM(G, Q)
 #'
 CM <- function(G, Q) {
   m <- length(G) + 1

@@ -2,3 +2,8 @@
 ^\.Rproj\.user$
 test.R
 ^LICENSE\.md$
+^.*\.txt$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

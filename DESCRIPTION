@@ -1,13 +1,20 @@
 Package: IntCens
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Non- and Semi-Parametric Analysis of Interval-Censored Data
 Version: 0.2.0
 Author: Lu Mao
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Maintainer: Lu Mao <lmao@biostat.wisc.edu>
+Description: Implements non- and semi-parametric methods for analyzing
+    interval-censored data. This includes iterative estimation routines
+    for proportional hazards and proportional odds models, as well as
+    nonparametric maximum likelihood estimation.
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/lmaowisc/IntCens
-BugReports: https://github.com/lmaowisc/IntCens/issues
+URL: https://github.com/lmaowisc/IntCens, https://lmaowisc.github.io/IntCens/
+Depends: 
+  R (>= 3.5.0)
+RoxygenNote: 7.3.1
+Suggests: 
+    knitr, rmarkdown
+VignetteBuilder: knitr
