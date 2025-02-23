@@ -1,0 +1,59 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# IntCens
+
+The `IntCens` package provides non- and semi-parametric methods for analyzing interval-censored data. This includes iterative estimation routines for proportional hazards and proportional odds models, as well as nonparametric maximum likelihood estimation.
+
+## Installation
+
+You can install the development version of IntCens from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("lmaowisc/IntCens")
+```
+
+## Example
+
+The main function for fitting nonparametric, PH, and PO models is `icsurvfit()`.
+Below is a basic example:
+```{r example}
+library(IntCens)
+## basic example code
+# A dataset containing interval-censored observations and a treatment indicator 
+# (radiation vs. radiation plus chemotherapy)
+data(bcos)
+n <- nrow(bcos) # sample size
+# Extract the left and right endpoints of the intervals
+set.seed(123)
+L <- bcos$left + rnorm(n, 0, 0.0001) # add random noise
+R <- bcos$right + rnorm(n, 0, 0.0001)
+# Covariate (binary)
+Z <- as.numeric(bcos$treatment == "RadChem")
+
+# Nonparametric
+obj_np <- icsurvfit(L, R)
+plot(obj_np, main = "Nonparametric")
+
+# Cox model (PH)
+obj_ph <- icsurvfit(L, R, Z, model = "PH")
+obj_ph
+
+# Proportional odds model (PO)
+obj_po <- icsurvfit(L, R, Z, model = "PO")
+obj_po
+```
+
